@@ -322,10 +322,10 @@
                 border-radius: 20px;
             }
             .grid-3 {
-                grid-template-columns: 1fr; /* เรียงแถวเดี่ยวบนมือถือ เพื่อไม่ให้เบียดกัน */
+                grid-template-columns: 1fr;
             }
             .grid-2 {
-                grid-template-columns: 1fr; /* เรียงแถวเดี่ยวบนมือถือ */
+                grid-template-columns: 1fr;
             }
             h1 {
                 font-size: 22px;
@@ -399,14 +399,36 @@
                 <div id="tradeup-input-box" style="display: none; background: #fafafa; padding: 18px; border-radius: 14px; border: 1px solid #dddddd; margin-top: 16px;">
                     <label style="color: var(--samsung-dark); font-weight: 700;">💰 ระบุมูลค่าประเมินรับซื้อเครื่องเก่า (บาท):</label>
                     <input type="number" id="old-phone-val" value="" min="0" step="100" oninput="calculate()" placeholder="ระบุราคาประเมินเครื่องเก่า...">
-                    <div id="trade-warning" class="warning-text">⚠️ กรุณาระบุมูลค่าเครื่องเก่ามากกว่า 0 บาท เพื่อรับสิทธิ์ส่วนลดเพิ่ม Trade-Up Top-up</div>
+                    <div id="trade-warning" class="warning-text">⚠️ กรุณาระบุมูลค่าเครื่องเก่ามากกว่า 0 บาท เพื่อรับสิทธิ์ส่วนลดเพิ่ม Trade-Up</div>
                     <div id="trade-normal-desc" style="font-size: 13px; color: var(--text-secondary); margin-top: 6px;">*ระบบนำส่วนลด Top-up และมูลค่าเครื่องเก่า หักลดในราคาสุทธิให้อัตโนมัติ</div>
                 </div>
             </div>
 
-            <!-- 3. Ecosystem Add-ons -->
+            <!-- 3. Purchase Type (ประเภทการซื้อ) - อยู่ลำดับที่ 3 ตามต้องการ -->
             <div class="section-card">
-                <div class="section-title"><span>3</span> แลกซื้ออุปกรณ์เสริม Ecosystem (รับส่วนลด 30%)</div>
+                <div class="section-title"><span>3</span> ประเภทการซื้อ</div>
+                <div class="grid-2">
+                    <div class="select-btn active" id="btn-type-normal" onclick="setPurchaseType('normal')">
+                        <div>📦 เครื่องเปล่า</div>
+                        <div class="price-sub">ราคาเครื่องปกติ</div>
+                    </div>
+                    <div class="select-btn" id="btn-type-package" onclick="setPurchaseType('package')">
+                        <div>📶 เครื่องพร้อมแพ็กเกจ</div>
+                        <div class="price-sub" style="color: var(--samsung-blue); font-weight: 600;">รับส่วนลดค่าเครื่องจากแพ็กเกจพิเศษ</div>
+                    </div>
+                </div>
+
+                <!-- ช่องกรอกส่วนลดแพ็กเกจ -->
+                <div id="package-input-box" style="display: none; background: #f0f4ff; padding: 18px; border-radius: 14px; border: 1px solid #d0d9ff; margin-top: 16px;">
+                    <label style="color: var(--samsung-blue); font-weight: 700;">🏷️ ระบุส่วนลดจากแพ็กเกจรายเดือน (บาท):</label>
+                    <input type="number" id="package-discount-val" value="" min="0" step="100" oninput="calculate()" placeholder="ระบุจำนวนเงินส่วนลดแพ็กเกจ...">
+                    <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px;">*ระบบจะนำส่วนลดแพ็กเกจนี้ไปหักลดจากราคาสุทธิให้อัตโนมัติทันที</div>
+                </div>
+            </div>
+
+            <!-- 4. Ecosystem Add-ons -->
+            <div class="section-card">
+                <div class="section-title"><span>4</span> แลกซื้ออุปกรณ์เสริม Ecosystem (รับส่วนลด 30%)</div>
                 
                 <div class="form-group">
                     <label>Galaxy Watch (ลด 30%):</label>
@@ -429,9 +451,9 @@
                 </div>
             </div>
 
-            <!-- 4. Samsung Care+ -->
+            <!-- 5. Samsung Care+ -->
             <div class="section-card">
-                <div class="section-title"><span>4</span> ความคุ้มครอง Samsung Care+</div>
+                <div class="section-title"><span>5</span> ความคุ้มครอง Samsung Care+</div>
                 <div class="grid-3" id="care-container">
                     <!-- Care options populated by JS -->
                 </div>
@@ -469,12 +491,16 @@
                 </div>
 
                 <!-- Discounts Breakdown -->
+                <div class="summary-row sub" id="row-package-disc" style="display: none;">
+                    <span>- ส่วนลดเครื่องพร้อมแพ็กเกจ:</span>
+                    <span class="discount-val" id="sum-package-disc">0 ฿</span>
+                </div>
                 <div class="summary-row sub" id="row-prebook-disc">
                     <span>- ส่วนลด Pre-booking:</span>
                     <span class="discount-val" id="sum-prebook-disc">0 ฿</span>
                 </div>
                 <div class="summary-row sub" id="row-tradeup-topup" style="display: none;">
-                    <span>- ส่วนลดเพิ่ม Trade-Up Top-up:</span>
+                    <span>- ส่วนลดเพิ่ม Trade-Up:</span>
                     <span class="discount-val" id="sum-tradeup-topup">0 ฿</span>
                 </div>
                 <div class="summary-row sub" id="row-old-phone" style="display: none;">
@@ -576,11 +602,26 @@
             }
         };
 
+        let purchaseType = 'normal'; // 'normal' หรือ 'package'
         let currentModel = 'Fold8Ultra';
         let currentStorageIdx = 0;
         let currentCareIdx = 0;
         let isHandraiser = false;
         let isTradeUp = false;
+
+        function setPurchaseType(type) {
+            purchaseType = type;
+            document.getElementById('btn-type-normal').className = `select-btn ${type === 'normal' ? 'active' : ''}`;
+            document.getElementById('btn-type-package').className = `select-btn ${type === 'package' ? 'active' : ''}`;
+            
+            const packageInputBox = document.getElementById('package-input-box');
+            packageInputBox.style.display = (type === 'package') ? 'block' : 'none';
+
+            if (type === 'package' && document.getElementById('package-discount-val').value === '') {
+                document.getElementById('package-discount-val').value = '3000';
+            }
+            calculate();
+        }
 
         function selectModel(modelKey) {
             currentModel = modelKey;
@@ -691,6 +732,9 @@
             const rawOldPhoneVal = document.getElementById('old-phone-val').value;
             const oldPhoneVal = isTradeUp ? (parseFloat(rawOldPhoneVal) || 0) : 0;
             
+            const rawPackageDisc = document.getElementById('package-discount-val').value;
+            const packageDisc = (purchaseType === 'package') ? (parseFloat(rawPackageDisc) || 0) : 0;
+
             const watchFull = parseFloat(document.getElementById('watch-select').value) || 0;
             const budsFull = parseFloat(document.getElementById('buds-select').value) || 0;
 
@@ -739,7 +783,7 @@
             const budsDisc = budsFull * 0.3;
             const ecoDiscTotal = watchDisc + budsDisc;
 
-            const totalDirectDiscount = prebookDisc + tradeupTopup + ecoDiscTotal + (oldPhoneVal > 0 ? oldPhoneVal : 0);
+            const totalDirectDiscount = packageDisc + prebookDisc + tradeupTopup + ecoDiscTotal + (oldPhoneVal > 0 ? oldPhoneVal : 0);
 
             // 3. Freebie Value
             const freebieVal = isHandraiser ? modelData.adapterVal : 0;
@@ -767,6 +811,9 @@
 
             document.getElementById('sum-full-total').innerText = `${totalFullPrice.toLocaleString()} ฿`;
 
+            document.getElementById('row-package-disc').style.display = (purchaseType === 'package' && packageDisc > 0) ? 'flex' : 'none';
+            document.getElementById('sum-package-disc').innerText = `-${packageDisc.toLocaleString()} ฿`;
+
             document.getElementById('row-prebook-disc').style.display = prebookDisc > 0 ? 'flex' : 'none';
             document.getElementById('sum-prebook-disc').innerText = `-${prebookDisc.toLocaleString()} ฿`;
             
@@ -789,8 +836,10 @@
         }
 
         function resetForm() {
+            setPurchaseType('normal');
             setHandraiser(false);
             setTradeUp(false);
+            document.getElementById('package-discount-val').value = '';
             document.getElementById('watch-select').value = '0';
             document.getElementById('buds-select').value = '0';
             document.getElementById('old-phone-val').value = '';
@@ -798,6 +847,7 @@
         }
 
         // Initialize
+        setPurchaseType('normal');
         selectModel('Fold8Ultra');
         setHandraiser(false);
         setTradeUp(false);
