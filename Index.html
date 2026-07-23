@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsung Experience Store</title>
+    <title>Pre-Order Offer & Price Calculator | Galaxy Z Series</title>
+    <style>
+        :root {
+            /* Samsung Official CI Color Palette */
+            --samsung-blue: #1428a0;      /* สีน้ำเงินซัมซุงแท้ */
+            --samsung-blue-hover: #0e1d7a;
+            --samsung-dark: #000000;      /* ดำสนิทแบบสไตล์แบรนด์พรีเมียม */
+            --samsung-gray-bg: #f4f4f4;   /* พื้นหลังเทาอ่อนสะอาดตา */
+            --card-bg: #ffffff;           /* การ์ดสีขาวบริสุทธิ์ */
+            --card-border: #e5e5e5;       /* เส้นขอบบางเนียน */
+            
+            --text-primary: #111111;
+            --text-secondary: #666666;
+            --accent-blue: #1428a0;
+            --success-green: #038454;
+            --highlight-gold: #b28900;
+            --danger-red: #da1a32;        /* สีแดงซัมซุงแท้ */
+            --font-family: "Samsung Sharp Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+
+        body {
+            background-color: var(--samsung-gray-bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        header {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px 0 30px 0;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--samsung-dark);
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--samsung-dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title span {
+            background-color: var(--samsung-dark);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* Grid Selection */
+        .grid-2, .grid-3 {
+            display: grid;
+            gap: 12px;
+        }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+        .select-btn {
+            background: #f7f7f7;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 70px;
+        }
+
+        .select-btn:hover {
+            background: #eeeeee;
+        }
+
+        .select-btn.active {
+            border-color: var(--samsung-blue);
+            background: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 0 0 1px var(--samsung-blue);
+        }
+
+        .select-btn div:first-child { font-size: 15px; }
+        .select-btn .price-sub { font-size: 13px; color: var(--text-secondary); margin-top: 4px; font-weight: normal; }
+        .select-btn.active .price-sub { color: var(--samsung-blue); font-weight: 600; }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #cccccc;
+            background-color: #ffffff;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: var(--samsung-blue);
+            box-shadow: 0 0 0 2px rgba(20, 40, 160, 0.15);
+        }
+
+        /* Summary Panel (แผงสรุปยอดสไตล์เว็บ Official) */
+        .summary-panel {
+            position: sticky;
+            top: 24px;
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            height: fit-content;
+        }
+
+        .summary-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--samsung-dark);
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            font-size: 15px;
+            color: #333333;
+        }
+
+        .summary-row.sub {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .summary-row .val { font-weight: 700; color: var(--samsung-dark); }
+        .discount-val { color: var(--danger-red); font-weight: 700; }
+        .benefit-val { color: var(--highlight-gold); font-weight: 700; }
+
+        .divider {
+            height: 1px;
+            background-color: var(--card-border);
+            margin: 18px 0;
+        }
+
+        .net-price-box {
+            background: #f0f4ff;
+            border: 1px solid #d0d9ff;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .net-price-label {
+            font-size: 13px;
+            color: var(--samsung-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .net-price-val {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--samsung-blue);
+            margin: 6px 0;
+        }
+
+        .installment-box {
+            background: #f2f9f5;
+            border: 1px solid #c7e6d4;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .installment-label {
+            font-size: 13px;
+            color: var(--success-green);
+            font-weight: 700;
+        }
+
+        .installment-val {
+            font-size: 26px;
+            font-weight: 800;
+            color: #025737;
+            margin-top: 4px;
+        }
+
+        .badge-save {
+            background-color: #fff8e1;
+            color: #8f6800;
+            border: 1px solid #ffecb3;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            float: right;
+        }
+
+        .btn-reset {
+            width: 100%;
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f4f4f4;
+            border: 1px solid #dddddd;
+            color: #333333;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+
+        .btn-reset:hover {
+            background-color: #000000;
+            color: #ffffff;
+            border-color: #000000;
+        }
+
+        .warning-text {
+            color: var(--danger-red);
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+            background: #fdf2f2;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #f9c6c9;
+            border-left: 4px solid var(--danger-red);
+        }
+
+        /* หมายเหตุเงื่อนไขราคา */
+        .disclaimer-box {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--card-border);
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Pre-Order Offer & Price Calculator | Galaxy Z Series</h1>
+        <p style="color: var(--text-secondary); font-size: 15px; margin-top: 8px;">ข้อเสนอพิเศษและคำนวณยอดผ่อนชำระ สำหรับ Samsung Experience Store</p>
+    </header>
+
+    <div class="container">
+        <!-- Left Column: Input Selection -->
+        <div class="selection-panel">
+            
+            <!-- 1. Model & Storage -->
+            <div class="section-card">
+                <div class="section-title"><span>1</span> รุ่นและความจุ</div>
+                <div class="grid-3" id="model-container">
+                    <div class="select-btn active" onclick="selectModel('Fold8Ultra')">
+                        <div>Z Fold8 Ultra</div>
+                    </div>
+                    <div class="select-btn" onclick="selectModel('Fold8')">
+                        <div>Z Fold8</div>
+                    </div>
+                    <div class="select-btn" onclick="selectModel('Flip8')">
+                        <div>Z Flip8</div>
+                    </div>
+                </div>
+                <label style="margin-top: 20px;">เลือกขนาดความจุ (Storage):</label>
+                <div class="grid-3" id="storage-container">
+                    <!-- Storage populated by JS -->
+                </div>
+            </div>
+
+            <!-- 2. Promotions & Trade-up -->
+            <div class="section-card">
+                <div class="section-title"><span>2</span> สิทธิพิเศษและโปรโมชั่น (Promotions & Trade-Up)</div>
+                
+                <label>2.1 สิทธิ์ลงทะเบียนความสนใจล่วงหน้า (Handraiser):</label>
+                <div class="grid-2" style="margin-bottom: 20px;">
+                    <div class="select-btn active" id="btn-hr-no" onclick="setHandraiser(false)">
+                        <div>❌ ไม่ได้ลงทะเบียนล่วงหน้า</div>
+                        <div class="price-sub">ไม่มีของแถมเพิ่มเติม</div>
+                    </div>
+                    <div class="select-btn" id="btn-hr-yes" onclick="setHandraiser(true)">
+                        <div>🎁 รับสิทธิ์ Handraiser</div>
+                        <div class="price-sub" id="hr-subtext">ฟรี Power Adapter 45W (1,090.-)</div>
+                    </div>
+                </div>
+
+                <label>2.2 โปรโมชั่นส่วนลดพิเศษ & เก่าแลกใหม่ (Trade-Up):</label>
+                <div class="grid-2">
+                    <div class="select-btn active" id="btn-promo-notrade" onclick="setTradeUp(false)">
+                        <div>📦 ไม่นำเครื่องเก่ามาแลก</div>
+                        <div class="price-sub" id="sub-notrade">รับส่วนลด Pre-booking 4,000.-</div>
+                    </div>
+                    <div class="select-btn" id="btn-promo-trade" onclick="setTradeUp(true)">
+                        <div>🔄 นำเครื่องเก่ามาแลก (Trade-Up)</div>
+                        <div class="price-sub" id="sub-trade" style="color: var(--success-green); font-weight: 700;">ลดคุ้ม 2 ต่อ! รวม 12,000.- + มูลค่าเครื่องเก่า</div>
+                    </div>
+                </div>
+
+                <!-- ช่องกรอกราคาเครื่องเก่า + ระบบตรวจสอบ 0 บาท -->
+                <div id="tradeup-input-box" style="display: none; background: #fafafa; padding: 18px; border-radius: 14px; border: 1px solid #dddddd; margin-top: 16px;">
+                    <label style="color: var(--samsung-dark); font-weight: 700;">💰 ระบุมูลค่าประเมินรับซื้อเครื่องเก่า (บาท):</label>
+                    <input type="number" id="old-phone-val" value="" min="0" step="100" oninput="calculate()" placeholder="ระบุราคาประเมินเครื่องเก่า...">
+                    <div id="trade-warning" class="warning-text">⚠️ กรุณาระบุมูลค่าเครื่องเก่ามากกว่า 0 บาท เพื่อรับสิทธิ์ส่วนลดเพิ่ม Trade-Up Top-up</div>
+                    <div id="trade-normal-desc" style="font-size: 13px; color: var(--text-secondary); margin-top: 6px;">*ระบบนำส่วนลด Top-up และมูลค่าเครื่องเก่า หักลดในราคาสุทธิให้อัตโนมัติ</div>
+                </div>
+            </div>
+
+            <!-- 3. Ecosystem Add-ons -->
+            <div class="section-card">
+                <div class="section-title"><span>3</span> แลกซื้ออุปกรณ์เสริม Ecosystem (รับส่วนลด 30%)</div>
+                
+                <div class="form-group">
+                    <label>Galaxy Watch (ลด 30%):</label>
+                    <select id="watch-select" onchange="calculate()">
+                        <option value="0">ไม่รับ Galaxy Watch</option>
+                        <option value="25900">Watch Ultra2 - ราคาปกติ 25,900.- (ลดเหลือ 18,130.-)</option>
+                        <option value="14900">Watch9 (44 mm) - ราคาปกติ 14,900.- (ลดเหลือ 10,430.-)</option>
+                        <option value="13900">Watch9 (40 mm) - ราคาปกติ 13,900.- (ลดเหลือ 9,730.-)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Galaxy Buds (ลด 30%):</label>
+                    <select id="buds-select" onchange="calculate()">
+                        <option value="0">ไม่รับ Galaxy Buds</option>
+                        <option value="7990">Buds4 Pro - ราคาปกติ 7,990.- (ลดเหลือ 5,593.-)</option>
+                        <option value="5990">Buds4 - ราคาปกติ 5,990.- (ลดเหลือ 4,193.-)</option>
+                        <option value="4290">Buds3 FE - ราคาปกติ 4,290.- (ลดเหลือ 3,003.-)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 4. Samsung Care+ -->
+            <div class="section-card">
+                <div class="section-title"><span>4</span> ความคุ้มครอง Samsung Care+</div>
+                <div class="grid-3" id="care-container">
+                    <!-- Care options populated by JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Summary Display -->
+        <div>
+            <div class="summary-panel">
+                <div class="summary-title">สรุปข้อเสนอและความคุ้มค่า</div>
+                
+                <div class="summary-row">
+                    <span>ราคาเครื่องเปล่า <span id="sum-model-name">Z Fold8 Ultra 256GB</span>:</span>
+                    <span class="val" id="sum-phone-price">69,900 ฿</span>
+                </div>
+                <div class="summary-row sub" id="row-watch-full" style="display: none;">
+                    <span>ราคาปกติ Galaxy Watch:</span>
+                    <span id="sum-watch-full">0 ฿</span>
+                </div>
+                <div class="summary-row sub" id="row-buds-full" style="display: none;">
+                    <span>ราคาปกติ Galaxy Buds:</span>
+                    <span id="sum-buds-full">0 ฿</span>
+                </div>
+                <div class="summary-row sub" id="row-care" style="display: none;">
+                    <span>Samsung Care+:</span>
+                    <span id="sum-care">0 ฿</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="summary-row">
+                    <span>ราคาเต็มรวมทั้งหมด:</span>
+                    <span class="val" id="sum-full-total" style="text-decoration: line-through; color: var(--text-secondary);">69,900 ฿</span>
+                </div>
+
+                <!-- Discounts Breakdown -->
+                <div class="summary-row sub" id="row-prebook-disc">
+                    <span>- ส่วนลด Pre-booking:</span>
+                    <span class="discount-val" id="sum-prebook-disc">0 ฿</span>
+                </div>
+                <div class="summary-row sub" id="row-tradeup-topup" style="display: none;">
+                    <span>- ส่วนลดเพิ่ม Trade-Up Top-up:</span>
+                    <span class="discount-val" id="sum-tradeup-topup">0 ฿</span>
+                </div>
+                <div class="summary-row sub" id="row-old-phone" style="display: none;">
+                    <span>- มูลค่าประเมินเครื่องเก่า:</span>
+                    <span class="discount-val" id="sum-old-phone">0 ฿</span>
+                </div>
+                <div class="summary-row sub" id="row-eco-disc" style="display: none;">
+                    <span>- ส่วนลด Ecosystem 30%:</span>
+                    <span class="discount-val" id="sum-eco-disc">0 ฿</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="summary-row">
+                    <span style="font-weight: 700; color: var(--danger-red);">ส่วนลดราคาที่ได้รับทันที:</span>
+                    <span class="val discount-val" id="sum-total-discount">- 0 ฿</span>
+                </div>
+
+                <div class="summary-row">
+                    <span style="color: var(--highlight-gold); font-weight: 700;">+ ฟรีของแถม (Adapter):</span>
+                    <span class="val benefit-val" id="sum-freebie-val">0 ฿</span>
+                </div>
+
+                <div style="margin-top: 12px; margin-bottom: 8px; overflow: hidden;">
+                    <span class="badge-save" id="sum-percent-badge">ประหยัดรวม 0%</span>
+                    <span style="font-size: 13px; color: var(--text-secondary);">ผลประโยชน์รวม: <strong style="color: var(--samsung-dark);" id="sum-total-benefit">0 ฿</strong></span>
+                </div>
+
+                <!-- Net Price -->
+                <div class="net-price-box">
+                    <div class="net-price-label">ราคาสุทธิที่ลูกค้าต้องชำระ</div>
+                    <div class="net-price-val" id="sum-net-price">69,900 ฿</div>
+                    <div style="font-size: 13px; color: #4361ee;" id="net-price-desc">ราคารวมเครื่องและอุปกรณ์เสริมที่เลือก</div>
+                </div>
+
+                <!-- Installment 0% 10 Months -->
+                <div class="installment-box">
+                    <div class="installment-label">⚡ ผ่อน 0% นาน 10 เดือน (ผ่านบัตรที่ร่วมรายการ)</div>
+                    <div class="installment-val" id="sum-installment">6,990 <span style="font-size: 16px; font-weight: normal;">฿ / เดือน</span></div>
+                </div>
+
+                <!-- ปุ่มล้างข้อมูล -->
+                <button class="btn-reset" onclick="resetForm()">🔄 Clear</button>
+
+                <!-- หมายเหตุเงื่อนไขราคา -->
+                <div class="disclaimer-box">
+                    *หมายเหตุ: ราคาสินค้าและข้อส่งเสริมการขายนี้มีผลเฉพาะ ณ เวลาที่เสนอราคา และอาจมีการเปลี่ยนแปลงโดยไม่ต้องแจ้งให้ทราบล่วงหน้า
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const products = {
+            Fold8Ultra: {
+                name: "Z Fold8 Ultra",
+                adapterVal: 1090,
+                adapterName: "Power Adapter 45W",
+                storage: [
+                    { cap: "256 GB", price: 69900, prebookDisc: 0, tradeupBonus: 8000 },
+                    { cap: "512 GB", price: 77900, prebookDisc: 4000, tradeupBonus: 8000 },
+                    { cap: "1 TB", price: 93900, prebookDisc: 4000, tradeupBonus: 11000 }
+                ],
+                care: [
+                    { label: "ไม่รับ Care+", price: 0 },
+                    { label: "คุ้มครองอุบัติเหตุ 1 ปี", price: 5299 },
+                    { label: "คุ้มครองอุบัติเหตุ 2 ปี)", price: 8899 }
+                ]
+            },
+            Fold8: {
+                name: "Z Fold8",
+                adapterVal: 1090,
+                adapterName: "Power Adapter 45W",
+                storage: [
+                    { cap: "256 GB", price: 61900, prebookDisc: 0, tradeupBonus: 8000 },
+                    { cap: "512 GB", price: 69900, prebookDisc: 4000, tradeupBonus: 8000 },
+                    { cap: "1 TB", price: 85900, prebookDisc: 4000, tradeupBonus: 11000 }
+                ],
+                care: [
+                    { label: "ไม่รับ Care+", price: 0 },
+                    { label: "คุ้มครองอุบัติเหตุ 1 ปี", price: 5299 },
+                    { label: "คุ้มครองอุบัติเหตุ 2 ปี", price: 8899 }
+                ]
+            },
+            Flip8: {
+                name: "Z Flip8",
+                adapterVal: 690,
+                adapterName: "Power Adapter 25W",
+                storage: [
+                    { cap: "256 GB", price: 42900, prebookDisc: 4000, tradeupBonus: 8000 },
+                    { cap: "512 GB", price: 50900, prebookDisc: 4000, tradeupBonus: 8000 }
+                ],
+                care: [
+                    { label: "ไม่รับ Care+", price: 0 },
+                    { label: "คุ้มครองอุบัติเหตุ 1 ปี", price: 3399 },
+                    { label: "คุ้มครองอุบัติเหตุ 2 ปี", price: 5299 }
+                ]
+            }
+        };
+
+        let currentModel = 'Fold8Ultra';
+        let currentStorageIdx = 0;
+        let currentCareIdx = 0;
+        let isHandraiser = false;
+        let isTradeUp = false;
+
+        function selectModel(modelKey) {
+            currentModel = modelKey;
+            currentStorageIdx = 0;
+            currentCareIdx = 0;
+
+            const btns = document.querySelectorAll('#model-container .select-btn');
+            btns.forEach((btn, idx) => {
+                if((idx === 0 && modelKey === 'Fold8Ultra') || (idx === 1 && modelKey === 'Fold8') || (idx === 2 && modelKey === 'Flip8')) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            document.getElementById('hr-subtext').innerText = `ฟรี ${products[modelKey].adapterName} (${products[modelKey].adapterVal.toLocaleString()}.-)`;
+
+            renderStorage();
+            renderCare();
+            updatePromoButtonsText();
+            calculate();
+        }
+
+        function setHandraiser(status) {
+            isHandraiser = status;
+            document.getElementById('btn-hr-no').className = `select-btn ${!status ? 'active' : ''}`;
+            document.getElementById('btn-hr-yes').className = `select-btn ${status ? 'active' : ''}`;
+            calculate();
+        }
+
+        function setTradeUp(status) {
+            isTradeUp = status;
+            document.getElementById('btn-promo-notrade').className = `select-btn ${!status ? 'active' : ''}`;
+            document.getElementById('btn-promo-trade').className = `select-btn ${status ? 'active' : ''}`;
+            
+            document.getElementById('tradeup-input-box').style.display = status ? 'block' : 'none';
+            
+            if(status && document.getElementById('old-phone-val').value === '') {
+                document.getElementById('old-phone-val').value = '5000';
+            }
+            calculate();
+        }
+
+        function renderStorage() {
+            const container = document.getElementById('storage-container');
+            container.innerHTML = '';
+            products[currentModel].storage.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = `select-btn ${idx === currentStorageIdx ? 'active' : ''}`;
+                div.onclick = () => {
+                    currentStorageIdx = idx;
+                    renderStorage();
+                    updatePromoButtonsText();
+                    calculate();
+                };
+                div.innerHTML = `<div>${item.cap}</div><div class="price-sub">${item.price.toLocaleString()}.-</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function renderCare() {
+            const container = document.getElementById('care-container');
+            container.innerHTML = '';
+            products[currentModel].care.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = `select-btn ${idx === currentCareIdx ? 'active' : ''}`;
+                div.onclick = () => {
+                    currentCareIdx = idx;
+                    renderCare();
+                    calculate();
+                };
+                div.innerHTML = `<div>${item.label}</div><div class="price-sub">${item.price > 0 ? '+' + item.price.toLocaleString() + '.-' : 'ไม่ต้องการความคุ้มครองเครื่อง'}</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function updatePromoButtonsText() {
+            const stg = products[currentModel].storage[currentStorageIdx];
+            const subNoTrade = document.getElementById('sub-notrade');
+            const subTrade = document.getElementById('sub-trade');
+
+            if (stg.prebookDisc > 0) {
+                subNoTrade.innerText = `รับส่วนลด Pre-booking ${stg.prebookDisc.toLocaleString()}.-`;
+            } else {
+                subNoTrade.innerText = `ไม่มีส่วนลด Pre-booking (ราคาปกติ)`;
+            }
+
+            if (currentModel === 'Flip8') {
+                subTrade.innerText = `Trade-Up ${stg.tradeupBonus.toLocaleString()} บาท + มูลค่าเครื่องเก่า (ไม่ได้ส่วนลด Pre-Booking)`;
+                subTrade.style.color = 'var(--danger-red)';
+            } else {
+                if (stg.prebookDisc > 0) {
+                    const totalTwoTiers = stg.prebookDisc + stg.tradeupBonus;
+                    subTrade.innerText = `✨ คุ้ม 2 ต่อ! รับส่วนลด Pre-booking และ Trade-Up รวม ${totalTwoTiers.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
+                    subTrade.style.color = 'var(--success-green)';
+                } else {
+                    subTrade.innerText = `Trade-Up ${stg.tradeupBonus.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
+                    subTrade.style.color = 'var(--success-green)';
+                }
+            }
+        }
+
+        function calculate() {
+            const modelData = products[currentModel];
+            const storageData = modelData.storage[currentStorageIdx];
+            const careData = modelData.care[currentCareIdx];
+
+            const rawOldPhoneVal = document.getElementById('old-phone-val').value;
+            const oldPhoneVal = isTradeUp ? (parseFloat(rawOldPhoneVal) || 0) : 0;
+            
+            const watchFull = parseFloat(document.getElementById('watch-select').value) || 0;
+            const budsFull = parseFloat(document.getElementById('buds-select').value) || 0;
+
+            let prebookDisc = 0;
+            let tradeupTopup = 0;
+
+            const warningEl = document.getElementById('trade-warning');
+            const normalDescEl = document.getElementById('trade-normal-desc');
+            const inputEl = document.getElementById('old-phone-val');
+
+            if (isTradeUp && oldPhoneVal <= 0) {
+                warningEl.style.display = 'block';
+                normalDescEl.style.display = 'none';
+                inputEl.style.borderColor = 'var(--danger-red)';
+                
+                tradeupTopup = 0;
+                prebookDisc = (currentModel === 'Flip8') ? 0 : storageData.prebookDisc;
+            } else {
+                warningEl.style.display = 'none';
+                if(isTradeUp) {
+                    normalDescEl.style.display = 'block';
+                    inputEl.style.borderColor = 'var(--samsung-blue)';
+                }
+                
+                if (!isTradeUp) {
+                    prebookDisc = storageData.prebookDisc;
+                    tradeupTopup = 0;
+                } else {
+                    if (currentModel === 'Flip8') {
+                        prebookDisc = 0; 
+                        tradeupTopup = storageData.tradeupBonus;
+                    } else {
+                        prebookDisc = storageData.prebookDisc;
+                        tradeupTopup = storageData.tradeupBonus;
+                    }
+                }
+            }
+
+            // 1. Full Price Calculation
+            const phonePrice = storageData.price;
+            const carePrice = careData.price;
+            const totalFullPrice = phonePrice + watchFull + budsFull + carePrice;
+
+            // 2. Discounts Calculation
+            const watchDisc = watchFull * 0.3;
+            const budsDisc = budsFull * 0.3;
+            const ecoDiscTotal = watchDisc + budsDisc;
+
+            const totalDirectDiscount = prebookDisc + tradeupTopup + ecoDiscTotal + (oldPhoneVal > 0 ? oldPhoneVal : 0);
+
+            // 3. Freebie Value
+            const freebieVal = isHandraiser ? modelData.adapterVal : 0;
+
+            // 4. Net Price & Total Benefits
+            const netPrice = Math.max(0, totalFullPrice - totalDirectDiscount);
+            const totalBenefit = totalDirectDiscount + freebieVal;
+            const benefitPercent = ((totalBenefit / (totalFullPrice + freebieVal)) * 100).toFixed(1);
+
+            // 5. Installment
+            const monthlyInstallment = Math.round(netPrice / 10);
+
+            // --- Update UI ---
+            document.getElementById('sum-model-name').innerText = `${modelData.name} (${storageData.cap})`;
+            document.getElementById('sum-phone-price').innerText = `${phonePrice.toLocaleString()} ฿`;
+            
+            document.getElementById('row-watch-full').style.display = watchFull > 0 ? 'flex' : 'none';
+            document.getElementById('sum-watch-full').innerText = `${watchFull.toLocaleString()} ฿`;
+            
+            document.getElementById('row-buds-full').style.display = budsFull > 0 ? 'flex' : 'none';
+            document.getElementById('sum-buds-full').innerText = `${budsFull.toLocaleString()} ฿`;
+
+            document.getElementById('row-care').style.display = carePrice > 0 ? 'flex' : 'none';
+            document.getElementById('sum-care').innerText = `${carePrice.toLocaleString()} ฿`;
+
+            document.getElementById('sum-full-total').innerText = `${totalFullPrice.toLocaleString()} ฿`;
+
+            document.getElementById('row-prebook-disc').style.display = prebookDisc > 0 ? 'flex' : 'none';
+            document.getElementById('sum-prebook-disc').innerText = `-${prebookDisc.toLocaleString()} ฿`;
+            
+            document.getElementById('row-tradeup-topup').style.display = tradeupTopup > 0 ? 'flex' : 'none';
+            document.getElementById('sum-tradeup-topup').innerText = `-${tradeupTopup.toLocaleString()} ฿`;
+
+            document.getElementById('row-old-phone').style.display = (isTradeUp && oldPhoneVal > 0) ? 'flex' : 'none';
+            document.getElementById('sum-old-phone').innerText = `-${oldPhoneVal.toLocaleString()} ฿`;
+
+            document.getElementById('row-eco-disc').style.display = ecoDiscTotal > 0 ? 'flex' : 'none';
+            document.getElementById('sum-eco-disc').innerText = `-${ecoDiscTotal.toLocaleString()} ฿`;
+
+            document.getElementById('sum-total-discount').innerText = `-${totalDirectDiscount.toLocaleString()} ฿`;
+            document.getElementById('sum-freebie-val').innerText = `+${freebieVal.toLocaleString()} ฿`;
+            document.getElementById('sum-total-benefit').innerText = `${totalBenefit.toLocaleString()} ฿`;
+            document.getElementById('sum-percent-badge').innerText = `ประหยัดรวม ${benefitPercent}%`;
+
+            document.getElementById('sum-net-price').innerText = `${netPrice.toLocaleString()} ฿`;
+            document.getElementById('sum-installment').innerHTML = `${monthlyInstallment.toLocaleString()} <span style="font-size: 16px; font-weight: normal;">฿ / เดือน</span>`;
+        }
+
+        function resetForm() {
+            setHandraiser(false);
+            setTradeUp(false);
+            document.getElementById('watch-select').value = '0';
+            document.getElementById('buds-select').value = '0';
+            document.getElementById('old-phone-val').value = '';
+            selectModel('Fold8Ultra');
+        }
+
+        // Initialize
+        selectModel('Fold8Ultra');
+        setHandraiser(false);
+        setTradeUp(false);
+    </script>
+</body>
+</html>
