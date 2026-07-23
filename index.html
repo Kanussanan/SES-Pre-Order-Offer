@@ -46,12 +46,6 @@
             gap: 24px;
         }
 
-        @media (max-width: 992px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-
         header {
             grid-column: 1 / -1;
             text-align: center;
@@ -312,13 +306,41 @@
             line-height: 1.6;
             text-align: center;
         }
+
+        /* --- MOBILE RESPONSIVE OPTIMIZATION --- */
+        @media (max-width: 992px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .summary-panel {
+                position: static;
+                padding: 20px;
+                border-radius: 20px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr; /* เรียงแถวเดี่ยวบนมือถือ เพื่อไม่ให้เบียดกัน */
+            }
+            .grid-2 {
+                grid-template-columns: 1fr; /* เรียงแถวเดี่ยวบนมือถือ */
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .section-card {
+                padding: 18px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Pre-Order Offer & Price Calculator | Galaxy Z Series</h1>
-        <p style="color: var(--text-secondary); font-size: 15px; margin-top: 8px;">ข้อเสนอพิเศษและคำนวณยอดผ่อนชำระ สำหรับ Samsung Experience Store</p>
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">ข้อเสนอพิเศษและคำนวณยอดผ่อนชำระ สำหรับ Samsung Experience Store</p>
     </header>
 
     <div class="container">
@@ -520,7 +542,7 @@
                 care: [
                     { label: "ไม่รับ Care+", price: 0 },
                     { label: "คุ้มครองอุบัติเหตุ 1 ปี", price: 5299 },
-                    { label: "คุ้มครองอุบัติเหตุ 2 ปี)", price: 8899 }
+                    { label: "คุ้มครองอุบัติเหตุ 2 ปี", price: 8899 }
                 ]
             },
             Fold8: {
