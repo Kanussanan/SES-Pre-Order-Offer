@@ -151,7 +151,7 @@
             font-weight: 600;
         }
 
-        select, input[type="number"], input[type="text"] {
+        select, input[type="number"], input[type="text"], textarea {
             width: 100%;
             padding: 12px 16px;
             border-radius: 10px;
@@ -163,7 +163,12 @@
             transition: all 0.2s;
         }
 
-        select:focus, input[type="number"]:focus, input[type="text"]:focus {
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        select:focus, input[type="number"]:focus, input[type="text"]:focus, textarea:focus {
             border-color: var(--samsung-blue);
             box-shadow: 0 0 0 2px rgba(20, 40, 160, 0.12);
         }
@@ -425,9 +430,19 @@
                 </div>
             </div>
 
-            <!-- 4. Ecosystem Add-ons -->
+            <!-- 4. ส่วนลดพิเศษเพิ่มเติมเฉพาะสาขา (เพิ่มใหม่ต่อจากประเภทการซื้อ) -->
             <div class="section-card">
-                <div class="section-title"><span>4</span> แลกซื้ออุปกรณ์เสริม Ecosystem (รับส่วนลด 30%)</div>
+                <div class="section-title"><span>4</span> ส่วนลดพิเศษเพิ่มเติมเฉพาะสาขา</div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label style="color: var(--danger-red); font-weight: 700;">🏷️ ระบุจำนวนเงินส่วนลดพิเศษจากสาขา (บาท):</label>
+                    <input type="number" id="branch-discount-val" value="" min="0" step="100" oninput="calculate()" placeholder="ระบุมูลค่าส่วนลดพิเศษเฉพาะสาขามอบให้ลูกค้า...">
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">*ส่วนลดนี้จะถูกนำไปหักลบในราคาสุทธิทันที</div>
+                </div>
+            </div>
+
+            <!-- 5. Ecosystem Add-ons -->
+            <div class="section-card">
+                <div class="section-title"><span>5</span> แลกซื้ออุปกรณ์เสริม Ecosystem (รับส่วนลด 30%)</div>
                 
                 <div class="form-group">
                     <label>Galaxy Watch (ลด 30%):</label>
@@ -450,17 +465,27 @@
                 </div>
             </div>
 
-            <!-- 5. Samsung Care+ (สลับมาข้อ 5) -->
+            <!-- 6. ข้อเสนอพิเศษเพิ่มเติม (เพิ่มใหม่ต่อจากอุปกรณ์เสริม) -->
             <div class="section-card">
-                <div class="section-title"><span>5</span> ความคุ้มครอง Samsung Care+</div>
+                <div class="section-title"><span>6</span> ข้อเสนอพิเศษเพิ่มเติม (ของแถม / Cashback)</div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label style="color: #8f6800; font-weight: 700;">🎁 ระบุข้อเสนอพิเศษหรือของแถมจากทางสาขา:</label>
+                    <textarea id="custom-offer-text" rows="2" placeholder="เช่น ฟรีเคสใสแท้, ติดฟิล์มกันรอยหน้าจอ, รับ Cashback จากบัตรเครดิตที่ร่วมรายการ 5%..." oninput="updateCustomOffer()"></textarea>
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">*ข้อความนี้จะแสดงในกล่องข้อเสนอพิเศษบนใบสรุปยอดด้านขวา</div>
+                </div>
+            </div>
+
+            <!-- 7. Samsung Care+ -->
+            <div class="section-card">
+                <div class="section-title"><span>7</span> ความคุ้มครอง Samsung Care+</div>
                 <div class="grid-3" id="care-container">
                     <!-- Care options populated by JS -->
                 </div>
             </div>
 
-            <!-- 6. ข้อมูลพนักงาน (สลับมาข้อ 6) -->
+            <!-- 8. ข้อมูลพนักงาน -->
             <div class="section-card">
-                <div class="section-title"><span>6</span> พนักงานผู้ดูแล (สำหรับลูกค้าติดต่อกลับ)</div>
+                <div class="section-title"><span>8</span> พนักงานผู้ดูแล (สำหรับลูกค้าติดต่อกลับ)</div>
                 <div class="grid-3">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label>ชื่อพนักงาน:</label>
@@ -513,6 +538,10 @@
                     <span>- ส่วนลดเครื่องพร้อมแพ็กเกจ:</span>
                     <span class="discount-val" id="sum-package-disc">0 ฿</span>
                 </div>
+                <div class="summary-row sub" id="row-branch-disc" style="display: none;">
+                    <span>- ส่วนลดพิเศษเฉพาะสาขา:</span>
+                    <span class="discount-val" id="sum-branch-disc">0 ฿</span>
+                </div>
                 <div class="summary-row sub" id="row-prebook-disc">
                     <span>- ส่วนลด Pre-booking:</span>
                     <span class="discount-val" id="sum-prebook-disc">0 ฿</span>
@@ -558,6 +587,12 @@
                 <div class="installment-box">
                     <div class="installment-label">⚡ ผ่อน 0% นาน 10 เดือน (ผ่านบัตรที่ร่วมรายการ)</div>
                     <div class="installment-val" id="sum-installment">6,990 <span style="font-size: 15px; font-weight: normal;">฿ / เดือน</span></div>
+                </div>
+
+                <!-- กล่องแสดงข้อเสนอพิเศษเพิ่มเติมในใบสรุป (ซ่อนไว้จนกว่าจะพิมพ์) -->
+                <div id="summary-custom-offer-box" style="background: #fff9e6; border: 1px dashed var(--highlight-gold); border-radius: 12px; padding: 12px; margin-top: 14px; display: none;">
+                    <div style="font-size: 12.5px; font-weight: 700; color: #8f6800; margin-bottom: 4px;">🎁 ข้อเสนอพิเศษเพิ่มเติมจากทางสาขา</div>
+                    <div style="font-size: 12.5px; color: var(--text-primary); white-space: pre-line; line-height: 1.5;" id="sum-custom-offer"></div>
                 </div>
 
                 <!-- ช่องข้อมูลติดต่อพนักงานในใบสรุป -->
@@ -755,6 +790,17 @@
             }
         }
 
+        function updateCustomOffer() {
+            const text = document.getElementById('custom-offer-text').value.trim();
+            const box = document.getElementById('summary-custom-offer-box');
+            if (text) {
+                box.style.display = 'block';
+                document.getElementById('sum-custom-offer').innerText = text;
+            } else {
+                box.style.display = 'none';
+            }
+        }
+
         function updateEmployeeInfo() {
             const name = document.getElementById('emp-name').value.trim();
             const branch = document.getElementById('emp-branch').value.trim();
@@ -812,6 +858,9 @@
             const rawPackageDisc = document.getElementById('package-discount-val').value;
             const packageDisc = (purchaseType === 'package') ? (parseFloat(rawPackageDisc) || 0) : 0;
 
+            const rawBranchDisc = document.getElementById('branch-discount-val').value;
+            const branchDisc = parseFloat(rawBranchDisc) || 0;
+
             const watchFull = parseFloat(document.getElementById('watch-select').value) || 0;
             const budsFull = parseFloat(document.getElementById('buds-select').value) || 0;
 
@@ -858,7 +907,7 @@
             const budsDisc = budsFull * 0.3;
             const ecoDiscTotal = watchDisc + budsDisc;
 
-            const totalDirectDiscount = packageDisc + prebookDisc + tradeupTopup + ecoDiscTotal + (oldPhoneVal > 0 ? oldPhoneVal : 0);
+            const totalDirectDiscount = packageDisc + branchDisc + prebookDisc + tradeupTopup + ecoDiscTotal + (oldPhoneVal > 0 ? oldPhoneVal : 0);
             const freebieVal = isHandraiser ? modelData.adapterVal : 0;
 
             const netPrice = Math.max(0, totalFullPrice - totalDirectDiscount);
@@ -882,6 +931,9 @@
 
             document.getElementById('row-package-disc').style.display = (purchaseType === 'package' && packageDisc > 0) ? 'flex' : 'none';
             document.getElementById('sum-package-disc').innerText = `-${packageDisc.toLocaleString()} ฿`;
+
+            document.getElementById('row-branch-disc').style.display = branchDisc > 0 ? 'flex' : 'none';
+            document.getElementById('sum-branch-disc').innerText = `-${branchDisc.toLocaleString()} ฿`;
 
             document.getElementById('row-prebook-disc').style.display = prebookDisc > 0 ? 'flex' : 'none';
             document.getElementById('sum-prebook-disc').innerText = `-${prebookDisc.toLocaleString()} ฿`;
@@ -909,8 +961,11 @@
             setHandraiser(false);
             setTradeUp(false);
             document.getElementById('package-discount-val').value = '';
+            document.getElementById('branch-discount-val').value = '';
             document.getElementById('watch-select').value = '0';
             document.getElementById('buds-select').value = '0';
+            document.getElementById('custom-offer-text').value = '';
+            document.getElementById('summary-custom-offer-box').style.display = 'none';
             document.getElementById('old-phone-val').value = '';
             document.getElementById('emp-name').value = '';
             document.getElementById('emp-branch').value = '';
