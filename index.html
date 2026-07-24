@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samsung Experience Store</title>
-    <title>Pre-Order Offer & Price Calculator | Galaxy Z Series</title>
+    <title>Samsung Experience Store | Pre-Order Offer & Price Calculator</title>
+    <!-- html2canvas สำหรับแปลงแผงสรุปยอดเป็นรูปภาพ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            /* Samsung Official CI Color Palette */
-            --samsung-blue: #1428a0;      /* สีน้ำเงินซัมซุงแท้ */
-            --samsung-blue-hover: #0e1d7a;
-            --samsung-dark: #000000;      /* ดำสนิทแบบสไตล์แบรนด์พรีเมียม */
-            --samsung-gray-bg: #f4f4f4;   /* พื้นหลังเทาอ่อนสะอาดตา */
-            --card-bg: #ffffff;           /* การ์ดสีขาวบริสุทธิ์ */
-            --card-border: #e5e5e5;       /* เส้นขอบบางเนียน */
+            /* Samsung Official CI Color Palette (Samsung.com Standard) */
+            --samsung-blue: #1428a0;
+            --samsung-blue-hover: #0b1c7a;
+            --samsung-dark: #000000;
+            --samsung-gray-bg: #f5f5f7;
+            --card-bg: #ffffff;
+            --card-border: #d8d8d8;
+            --card-border-active: #1428a0;
             
-            --text-primary: #111111;
-            --text-secondary: #666666;
-            --accent-blue: #1428a0;
+            --text-primary: #000000;
+            --text-secondary: #707070;
             --success-green: #038454;
-            --highlight-gold: #b28900;
-            --danger-red: #da1a32;        /* สีแดงซัมซุงแท้ */
+            --highlight-gold: #ad8b00;
+            --danger-red: #da1a32;
             --font-family: "Samsung Sharp Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
@@ -35,39 +36,44 @@
             background-color: var(--samsung-gray-bg);
             color: var(--text-primary);
             line-height: 1.5;
-            padding: 24px;
+            padding: 32px 16px;
         }
 
         .container {
-            max-width: 1240px;
+            max-width: 1280px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 440px;
-            gap: 24px;
+            grid-template-columns: 1fr 420px;
+            gap: 28px;
+            align-items: start;
         }
 
         header {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 20px 0 30px 0;
-            border-bottom: 1px solid var(--card-border);
-            margin-bottom: 10px;
+            padding: 10px 0 32px 0;
         }
 
         h1 {
-            font-size: 30px;
+            font-size: 32px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--samsung-dark);
         }
 
+        /* Samsung.com Style Cards */
         .section-card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 28px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+            transition: border-color 0.2s;
+        }
+
+        .section-card:hover {
+            border-color: #b0b0b0;
         }
 
         .section-title {
@@ -83,13 +89,13 @@
         .section-title span {
             background-color: var(--samsung-dark);
             color: #fff;
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
         }
 
@@ -102,22 +108,23 @@
         .grid-3 { grid-template-columns: repeat(3, 1fr); }
 
         .select-btn {
-            background: #f7f7f7;
-            border: 2px solid transparent;
-            border-radius: 14px;
-            padding: 16px;
+            background: #fafafa;
+            border: 1.5px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 0.2s ease;
             color: var(--text-primary);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 70px;
+            min-height: 68px;
         }
 
         .select-btn:hover {
-            background: #eeeeee;
+            background: #f0f0f0;
+            border-color: #999;
         }
 
         .select-btn.active {
@@ -127,8 +134,8 @@
             box-shadow: 0 0 0 1px var(--samsung-blue);
         }
 
-        .select-btn div:first-child { font-size: 15px; }
-        .select-btn .price-sub { font-size: 13px; color: var(--text-secondary); margin-top: 4px; font-weight: normal; }
+        .select-btn div:first-child { font-size: 14.5px; }
+        .select-btn .price-sub { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; font-weight: normal; }
         .select-btn.active .price-sub { color: var(--samsung-blue); font-weight: 600; }
 
         /* Form Controls */
@@ -138,48 +145,47 @@
 
         label {
             display: block;
-            font-size: 14px;
+            font-size: 13.5px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
         }
 
-        select, input[type="number"] {
+        select, input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 14px 16px;
-            border-radius: 12px;
-            border: 1px solid #cccccc;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--card-border);
             background-color: #ffffff;
             color: var(--text-primary);
-            font-size: 15px;
+            font-size: 14.5px;
             outline: none;
             transition: all 0.2s;
         }
 
-        select:focus, input[type="number"]:focus {
+        select:focus, input[type="number"]:focus, input[type="text"]:focus {
             border-color: var(--samsung-blue);
-            box-shadow: 0 0 0 2px rgba(20, 40, 160, 0.15);
+            box-shadow: 0 0 0 2px rgba(20, 40, 160, 0.12);
         }
 
-        /* Summary Panel (แผงสรุปยอดสไตล์เว็บ Official) */
+        /* Summary Panel (Samsung Cart Style) */
         .summary-panel {
             position: sticky;
             top: 24px;
             background: #ffffff;
             border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-            height: fit-content;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
         }
 
         .summary-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--samsung-dark);
             border-bottom: 1px solid var(--card-border);
-            padding-bottom: 16px;
-            margin-bottom: 20px;
+            padding-bottom: 14px;
+            margin-bottom: 18px;
             text-align: center;
         }
 
@@ -187,14 +193,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            font-size: 15px;
-            color: #333333;
+            margin-bottom: 12px;
+            font-size: 14.5px;
+            color: #222;
         }
 
         .summary-row.sub {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13.5px;
         }
 
         .summary-row .val { font-weight: 700; color: var(--samsung-dark); }
@@ -204,77 +210,77 @@
         .divider {
             height: 1px;
             background-color: var(--card-border);
-            margin: 18px 0;
+            margin: 16px 0;
         }
 
         .net-price-box {
-            background: #f0f4ff;
-            border: 1px solid #d0d9ff;
-            border-radius: 16px;
-            padding: 20px;
+            background: #f4f6fc;
+            border: 1px solid #d1dcfb;
+            border-radius: 14px;
+            padding: 18px;
             text-align: center;
-            margin: 20px 0;
+            margin: 18px 0;
         }
 
         .net-price-label {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--samsung-blue);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             font-weight: 700;
         }
 
         .net-price-val {
-            font-size: 36px;
+            font-size: 34px;
             font-weight: 800;
             color: var(--samsung-blue);
-            margin: 6px 0;
+            margin: 4px 0;
         }
 
         .installment-box {
-            background: #f2f9f5;
-            border: 1px solid #c7e6d4;
-            border-radius: 16px;
-            padding: 16px;
+            background: #f0f8f4;
+            border: 1px solid #cce8d9;
+            border-radius: 14px;
+            padding: 14px;
             text-align: center;
         }
 
         .installment-label {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--success-green);
             font-weight: 700;
         }
 
         .installment-val {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             color: #025737;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .badge-save {
-            background-color: #fff8e1;
+            background-color: #fff9e6;
             color: #8f6800;
-            border: 1px solid #ffecb3;
-            padding: 4px 10px;
+            border: 1px solid #ffe699;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             float: right;
         }
 
         .btn-reset {
             width: 100%;
-            margin-top: 20px;
-            padding: 16px;
-            background-color: #f4f4f4;
-            border: 1px solid #dddddd;
-            color: #333333;
-            border-radius: 14px;
+            margin-top: 12px;
+            padding: 12px;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            color: #333;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
             transition: all 0.2s;
-            font-size: 15px;
+            font-size: 13.5px;
         }
 
         .btn-reset:hover {
@@ -285,29 +291,28 @@
 
         .warning-text {
             color: var(--danger-red);
-            font-size: 13px;
-            margin-top: 10px;
+            font-size: 12.5px;
+            margin-top: 8px;
             display: none;
             font-weight: 600;
             background: #fdf2f2;
-            padding: 12px 16px;
-            border-radius: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
             border: 1px solid #f9c6c9;
             border-left: 4px solid var(--danger-red);
         }
 
-        /* หมายเหตุเงื่อนไขราคา */
         .disclaimer-box {
-            margin-top: 20px;
-            padding-top: 16px;
+            margin-top: 14px;
+            padding-top: 12px;
             border-top: 1px dashed var(--card-border);
-            font-size: 11.5px;
+            font-size: 11px;
             color: var(--text-secondary);
-            line-height: 1.6;
+            line-height: 1.5;
             text-align: center;
         }
 
-        /* --- MOBILE RESPONSIVE OPTIMIZATION --- */
+        /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 992px) {
             body {
                 padding: 12px;
@@ -319,16 +324,12 @@
             .summary-panel {
                 position: static;
                 padding: 20px;
-                border-radius: 20px;
             }
-            .grid-3 {
-                grid-template-columns: 1fr;
-            }
-            .grid-2 {
+            .grid-3, .grid-2 {
                 grid-template-columns: 1fr;
             }
             h1 {
-                font-size: 22px;
+                font-size: 24px;
             }
             .section-card {
                 padding: 18px;
@@ -339,8 +340,8 @@
 <body>
 
     <header>
-        <h1>Pre-Order Offer & Price Calculator | Galaxy Z Series</h1>
-        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">ข้อเสนอพิเศษและคำนวณยอดผ่อนชำระ สำหรับ Samsung Experience Store</p>
+        <h1>Pre-Order Offer & Price Calculator</h1>
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 6px;">Galaxy Z Series | Samsung Experience Store</p>
     </header>
 
     <div class="container">
@@ -361,7 +362,7 @@
                         <div>Z Flip8</div>
                     </div>
                 </div>
-                <label style="margin-top: 20px;">เลือกขนาดความจุ (Storage):</label>
+                <label style="margin-top: 18px;">เลือกขนาดความจุ (Storage):</label>
                 <div class="grid-3" id="storage-container">
                     <!-- Storage populated by JS -->
                 </div>
@@ -372,7 +373,7 @@
                 <div class="section-title"><span>2</span> สิทธิพิเศษและโปรโมชั่น (Promotions & Trade-Up)</div>
                 
                 <label>2.1 สิทธิ์ลงทะเบียนความสนใจล่วงหน้า (Handraiser):</label>
-                <div class="grid-2" style="margin-bottom: 20px;">
+                <div class="grid-2" style="margin-bottom: 18px;">
                     <div class="select-btn active" id="btn-hr-no" onclick="setHandraiser(false)">
                         <div>❌ ไม่ได้ลงทะเบียนล่วงหน้า</div>
                         <div class="price-sub">ไม่มีของแถมเพิ่มเติม</div>
@@ -395,16 +396,15 @@
                     </div>
                 </div>
 
-                <!-- ช่องกรอกราคาเครื่องเก่า + ระบบตรวจสอบ 0 บาท -->
-                <div id="tradeup-input-box" style="display: none; background: #fafafa; padding: 18px; border-radius: 14px; border: 1px solid #dddddd; margin-top: 16px;">
+                <div id="tradeup-input-box" style="display: none; background: #fafafa; padding: 16px; border-radius: 12px; border: 1px solid #ddd; margin-top: 14px;">
                     <label style="color: var(--samsung-dark); font-weight: 700;">💰 ระบุมูลค่าประเมินรับซื้อเครื่องเก่า (บาท):</label>
                     <input type="number" id="old-phone-val" value="" min="0" step="100" oninput="calculate()" placeholder="ระบุราคาประเมินเครื่องเก่า...">
                     <div id="trade-warning" class="warning-text">⚠️ กรุณาระบุมูลค่าเครื่องเก่ามากกว่า 0 บาท เพื่อรับสิทธิ์ส่วนลดเพิ่ม Trade-Up</div>
-                    <div id="trade-normal-desc" style="font-size: 13px; color: var(--text-secondary); margin-top: 6px;">*ระบบนำส่วนลด Top-up และมูลค่าเครื่องเก่า หักลดในราคาสุทธิให้อัตโนมัติ</div>
+                    <div id="trade-normal-desc" style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px;">*ระบบนำส่วนลด Top-up และมูลค่าเครื่องเก่า หักลดในราคาสุทธิให้อัตโนมัติ</div>
                 </div>
             </div>
 
-            <!-- 3. Purchase Type (ประเภทการซื้อ) - อยู่ลำดับที่ 3 ตามต้องการ -->
+            <!-- 3. Purchase Type -->
             <div class="section-card">
                 <div class="section-title"><span>3</span> ประเภทการซื้อ</div>
                 <div class="grid-2">
@@ -418,11 +418,10 @@
                     </div>
                 </div>
 
-                <!-- ช่องกรอกส่วนลดแพ็กเกจ -->
-                <div id="package-input-box" style="display: none; background: #f0f4ff; padding: 18px; border-radius: 14px; border: 1px solid #d0d9ff; margin-top: 16px;">
+                <div id="package-input-box" style="display: none; background: #f4f6fc; padding: 16px; border-radius: 12px; border: 1px solid #d1dcfb; margin-top: 14px;">
                     <label style="color: var(--samsung-blue); font-weight: 700;">🏷️ ระบุส่วนลดจากแพ็กเกจรายเดือน (บาท):</label>
                     <input type="number" id="package-discount-val" value="" min="0" step="100" oninput="calculate()" placeholder="ระบุจำนวนเงินส่วนลดแพ็กเกจ...">
-                    <div style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px;">*ระบบจะนำส่วนลดแพ็กเกจนี้ไปหักลดจากราคาสุทธิให้อัตโนมัติทันที</div>
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">*ระบบจะนำส่วนลดแพ็กเกจนี้ไปหักลดจากราคาสุทธิให้อัตโนมัติทันที</div>
                 </div>
             </div>
 
@@ -451,7 +450,7 @@
                 </div>
             </div>
 
-            <!-- 5. Samsung Care+ -->
+            <!-- 5. Samsung Care+ (สลับมาข้อ 5) -->
             <div class="section-card">
                 <div class="section-title"><span>5</span> ความคุ้มครอง Samsung Care+</div>
                 <div class="grid-3" id="care-container">
@@ -459,11 +458,30 @@
                 </div>
             </div>
 
+            <!-- 6. ข้อมูลพนักงาน (สลับมาข้อ 6) -->
+            <div class="section-card">
+                <div class="section-title"><span>6</span> พนักงานผู้ดูแล (สำหรับลูกค้าติดต่อกลับ)</div>
+                <div class="grid-3">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>ชื่อพนักงาน:</label>
+                        <input type="text" id="emp-name" placeholder="ระบุชื่อพนักงาน..." oninput="updateEmployeeInfo()">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>สาขา:</label>
+                        <input type="text" id="emp-branch" placeholder="ระบุสาขา..." oninput="updateEmployeeInfo()">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>เบอร์โทรศัพท์:</label>
+                        <input type="text" id="emp-phone" placeholder="ระบุเบอร์โทร..." oninput="updateEmployeeInfo()">
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Right Column: Summary Display -->
         <div>
-            <div class="summary-panel">
+            <div class="summary-panel" id="capture-area">
                 <div class="summary-title">สรุปข้อเสนอและความคุ้มค่า</div>
                 
                 <div class="summary-row">
@@ -515,7 +533,7 @@
                 <div class="divider"></div>
 
                 <div class="summary-row">
-                    <span style="font-weight: 700; color: var(--danger-red);">ส่วนลดราคาที่ได้รับทันที:</span>
+                    <span style="font-weight: 700; color: var(--danger-red);">ส่วนลดที่ได้รับ:</span>
                     <span class="val discount-val" id="sum-total-discount">- 0 ฿</span>
                 </div>
 
@@ -524,32 +542,45 @@
                     <span class="val benefit-val" id="sum-freebie-val">0 ฿</span>
                 </div>
 
-                <div style="margin-top: 12px; margin-bottom: 8px; overflow: hidden;">
+                <div style="margin-top: 10px; margin-bottom: 6px; overflow: hidden;">
                     <span class="badge-save" id="sum-percent-badge">ประหยัดรวม 0%</span>
-                    <span style="font-size: 13px; color: var(--text-secondary);">มูลค่าส่วนลดและของแถมรวม: <strong style="color: var(--samsung-dark);" id="sum-total-benefit">0 ฿</strong></span>
+                    <span style="font-size: 12.5px; color: var(--text-secondary);">มูลค่าส่วนลดรวม: <strong style="color: var(--samsung-dark);" id="sum-total-benefit">0 ฿</strong></span>
                 </div>
 
                 <!-- Net Price -->
                 <div class="net-price-box">
                     <div class="net-price-label">ราคาสุทธิที่ลูกค้าต้องชำระ</div>
                     <div class="net-price-val" id="sum-net-price">69,900 ฿</div>
-                    <div style="font-size: 13px; color: #4361ee;" id="net-price-desc">ราคารวมเครื่องและอุปกรณ์เสริมที่เลือก</div>
+                    <div style="font-size: 12px; color: #4361ee;" id="net-price-desc">ราคารวมเครื่องและอุปกรณ์เสริมที่เลือก</div>
                 </div>
 
                 <!-- Installment 0% 10 Months -->
                 <div class="installment-box">
                     <div class="installment-label">⚡ ผ่อน 0% นาน 10 เดือน (ผ่านบัตรที่ร่วมรายการ)</div>
-                    <div class="installment-val" id="sum-installment">6,990 <span style="font-size: 16px; font-weight: normal;">฿ / เดือน</span></div>
+                    <div class="installment-val" id="sum-installment">6,990 <span style="font-size: 15px; font-weight: normal;">฿ / เดือน</span></div>
                 </div>
 
-                <!-- ปุ่มล้างข้อมูล -->
-                <button class="btn-reset" onclick="resetForm()">🔄 Clear</button>
+                <!-- ช่องข้อมูลติดต่อพนักงานในใบสรุป -->
+                <div id="summary-emp-box" style="background: #fafafa; border: 1px dashed var(--samsung-blue); border-radius: 12px; padding: 12px; margin-top: 14px; display: none;">
+                    <div style="font-size: 12.5px; font-weight: 700; color: var(--samsung-blue); margin-bottom: 2px;">👨‍💼 เจ้าหน้าที่ผู้ดูแลข้อเสนอ</div>
+                    <div style="font-size: 12.5px; color: var(--text-primary);" id="sum-emp-details">พนักงาน: - | สาขา: -</div>
+                    <div style="font-size: 12.5px; color: var(--samsung-dark); font-weight: 600; margin-top: 2px;" id="sum-emp-phone">โทร: -</div>
+                </div>
 
-                <!-- หมายเหตุเงื่อนไขราคา -->
+                <!-- หมายเหตุ -->
                 <div class="disclaimer-box">
                     *หมายเหตุ: ราคาสินค้าและข้อส่งเสริมการขายนี้มีผลเฉพาะ ณ เวลาที่เสนอราคา และอาจมีการเปลี่ยนแปลงโดยไม่ต้องแจ้งให้ทราบล่วงหน้า
                 </div>
             </div>
+
+            <!-- ปุ่มกดบันทึกรูปภาพและแชร์ -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+                <button onclick="saveSummaryImage()" style="background-color: var(--samsung-blue); color: #fff; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13.5px; transition: opacity 0.2s;">📷 บันทึกรูปภาพ</button>
+                <button onclick="shareSummaryImage()" style="background-color: var(--success-green); color: #fff; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13.5px; transition: opacity 0.2s;">📤 แชร์ข้อเสนอ</button>
+            </div>
+
+            <!-- ปุ่มล้างข้อมูล -->
+            <button class="btn-reset" onclick="resetForm()">🔄 Clear ข้อมูลทั้งหมด</button>
         </div>
 
     </div>
@@ -602,7 +633,7 @@
             }
         };
 
-        let purchaseType = 'normal'; // 'normal' หรือ 'package'
+        let purchaseType = 'normal';
         let currentModel = 'Fold8Ultra';
         let currentStorageIdx = 0;
         let currentCareIdx = 0;
@@ -693,7 +724,7 @@
                     renderCare();
                     calculate();
                 };
-                div.innerHTML = `<div>${item.label}</div><div class="price-sub">${item.price > 0 ? '+' + item.price.toLocaleString() + '.-' : 'ไม่ต้องการความคุ้มครองเครื่อง'}</div>`;
+                div.innerHTML = `<div>${item.label}</div><div class="price-sub">${item.price > 0 ? '+' + item.price.toLocaleString() + '.-' : 'ไม่ต้องการความคุ้มครอง'}</div>`;
                 container.appendChild(div);
             });
         }
@@ -710,18 +741,64 @@
             }
 
             if (currentModel === 'Flip8') {
-                subTrade.innerText = `Trade-Up ${stg.tradeupBonus.toLocaleString()} บาท + มูลค่าเครื่องเก่า (ไม่ได้ส่วนลด Pre-Booking)`;
+                subTrade.innerText = `Trade-Up ${stg.tradeupBonus.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
                 subTrade.style.color = 'var(--danger-red)';
             } else {
                 if (stg.prebookDisc > 0) {
                     const totalTwoTiers = stg.prebookDisc + stg.tradeupBonus;
-                    subTrade.innerText = `✨ คุ้ม 2 ต่อ! รับส่วนลด Pre-booking และ Trade-Up รวม ${totalTwoTiers.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
+                    subTrade.innerText = `✨ คุ้ม 2 ต่อ! รวม ${totalTwoTiers.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
                     subTrade.style.color = 'var(--success-green)';
                 } else {
                     subTrade.innerText = `Trade-Up ${stg.tradeupBonus.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
                     subTrade.style.color = 'var(--success-green)';
                 }
             }
+        }
+
+        function updateEmployeeInfo() {
+            const name = document.getElementById('emp-name').value.trim();
+            const branch = document.getElementById('emp-branch').value.trim();
+            const phone = document.getElementById('emp-phone').value.trim();
+            
+            const empBox = document.getElementById('summary-emp-box');
+            if (name || branch || phone) {
+                empBox.style.display = 'block';
+                document.getElementById('sum-emp-details').innerText = `พนักงาน: ${name || '-'} | สาขา: ${branch || '-'}`;
+                document.getElementById('sum-emp-phone').innerText = `เบอร์โทร: ${phone || '-'}`;
+            } else {
+                empBox.style.display = 'none';
+            }
+        }
+
+        function saveSummaryImage() {
+            const panel = document.getElementById('capture-area');
+            html2canvas(panel, { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Samsung-Galaxy-PreOrder-Offer.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        function shareSummaryImage() {
+            const panel = document.getElementById('capture-area');
+            html2canvas(panel, { scale: 2, useCORS: true }).then(canvas => {
+                canvas.toBlob(blob => {
+                    const file = new File([blob], 'Samsung-Galaxy-PreOrder-Offer.png', { type: 'image/png' });
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        navigator.share({
+                            title: 'ใบเสนอราคา Samsung Galaxy Z Series',
+                            text: 'ข้อเสนอพิเศษและสรุปราคา Pre-Order จาก Samsung Experience Store',
+                            files: [file]
+                        }).catch(error => console.log('Sharing failed', error));
+                    } else {
+                        const link = document.createElement('a');
+                        link.download = 'Samsung-Galaxy-PreOrder-Offer.png';
+                        link.href = URL.createObjectURL(blob);
+                        link.click();
+                    }
+                });
+            });
         }
 
         function calculate() {
@@ -773,30 +850,22 @@
                 }
             }
 
-            // 1. Full Price Calculation
             const phonePrice = storageData.price;
             const carePrice = careData.price;
             const totalFullPrice = phonePrice + watchFull + budsFull + carePrice;
 
-            // 2. Discounts Calculation
             const watchDisc = watchFull * 0.3;
             const budsDisc = budsFull * 0.3;
             const ecoDiscTotal = watchDisc + budsDisc;
 
             const totalDirectDiscount = packageDisc + prebookDisc + tradeupTopup + ecoDiscTotal + (oldPhoneVal > 0 ? oldPhoneVal : 0);
-
-            // 3. Freebie Value
             const freebieVal = isHandraiser ? modelData.adapterVal : 0;
 
-            // 4. Net Price & Total Benefits
             const netPrice = Math.max(0, totalFullPrice - totalDirectDiscount);
             const totalBenefit = totalDirectDiscount + freebieVal;
             const benefitPercent = ((totalBenefit / (totalFullPrice + freebieVal)) * 100).toFixed(1);
-
-            // 5. Installment
             const monthlyInstallment = Math.round(netPrice / 10);
 
-            // --- Update UI ---
             document.getElementById('sum-model-name').innerText = `${modelData.name} (${storageData.cap})`;
             document.getElementById('sum-phone-price').innerText = `${phonePrice.toLocaleString()} ฿`;
             
@@ -832,7 +901,7 @@
             document.getElementById('sum-percent-badge').innerText = `ประหยัดรวม ${benefitPercent}%`;
 
             document.getElementById('sum-net-price').innerText = `${netPrice.toLocaleString()} ฿`;
-            document.getElementById('sum-installment').innerHTML = `${monthlyInstallment.toLocaleString()} <span style="font-size: 16px; font-weight: normal;">฿ / เดือน</span>`;
+            document.getElementById('sum-installment').innerHTML = `${monthlyInstallment.toLocaleString()} <span style="font-size: 15px; font-weight: normal;">฿ / เดือน</span>`;
         }
 
         function resetForm() {
@@ -843,10 +912,13 @@
             document.getElementById('watch-select').value = '0';
             document.getElementById('buds-select').value = '0';
             document.getElementById('old-phone-val').value = '';
+            document.getElementById('emp-name').value = '';
+            document.getElementById('emp-branch').value = '';
+            document.getElementById('emp-phone').value = '';
+            document.getElementById('summary-emp-box').style.display = 'none';
             selectModel('Fold8Ultra');
         }
 
-        // Initialize
         setPurchaseType('normal');
         selectModel('Fold8Ultra');
         setHandraiser(false);
