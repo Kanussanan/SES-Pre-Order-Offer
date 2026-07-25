@@ -392,12 +392,12 @@
                 <label>2.2 โปรโมชั่นส่วนลดพิเศษ & เก่าแลกใหม่ (Trade-Up):</label>
                 <div class="grid-2">
                     <div class="select-btn active" id="btn-promo-notrade" onclick="setTradeUp(false)">
-                        <div>📦 ไม่นำเครื่องเก่ามาแลก</div>
-                        <div class="price-sub" id="sub-notrade">รับส่วนลด Pre-booking 4,000.-</div>
+                        <div>📦 ไม่นำเครื่องเก่ามาแลก (ส่วนลดเงินสด)</div>
+                        <div class="price-sub" id="sub-notrade">รับส่วนลดพิเศษ 5,000.-</div>
                     </div>
                     <div class="select-btn" id="btn-promo-trade" onclick="setTradeUp(true)">
                         <div>🔄 นำเครื่องเก่ามาแลก (Trade-Up)</div>
-                        <div class="price-sub" id="sub-trade" style="color: var(--success-green); font-weight: 700;">ลดคุ้ม 2 ต่อ! รวม 12,000.- + มูลค่าเครื่องเก่า</div>
+                        <div class="price-sub" id="sub-trade" style="color: var(--success-green); font-weight: 700;">ลดคุ้ม 2 ต่อ! + มูลค่าเครื่องเก่า</div>
                     </div>
                 </div>
 
@@ -430,7 +430,7 @@
                 </div>
             </div>
 
-            <!-- 4. ส่วนลดพิเศษเพิ่มเติมเฉพาะสาขา (เพิ่มใหม่ต่อจากประเภทการซื้อ) -->
+            <!-- 4. ส่วนลดพิเศษเพิ่มเติมเฉพาะสาขา -->
             <div class="section-card">
                 <div class="section-title"><span>4</span> ส่วนลดพิเศษเพิ่มเติมเฉพาะสาขา</div>
                 <div class="form-group" style="margin-bottom: 0;">
@@ -465,7 +465,7 @@
                 </div>
             </div>
 
-            <!-- 6. ข้อเสนอพิเศษเพิ่มเติม (เพิ่มใหม่ต่อจากอุปกรณ์เสริม) -->
+            <!-- 6. ข้อเสนอพิเศษเพิ่มเติม -->
             <div class="section-card">
                 <div class="section-title"><span>6</span> ข้อเสนอพิเศษเพิ่มเติม (ของแถม / Cashback)</div>
                 <div class="form-group" style="margin-bottom: 0;">
@@ -510,8 +510,8 @@
                 <div class="summary-title">สรุปข้อเสนอและความคุ้มค่า</div>
                 
                 <div class="summary-row">
-                    <span>ราคาเครื่องเปล่า <span id="sum-model-name">Z Fold8 Ultra 256GB</span>:</span>
-                    <span class="val" id="sum-phone-price">69,900 ฿</span>
+                    <span>ราคาเครื่องเปล่า <span id="sum-model-name">Z Fold8 Ultra 512GB</span>:</span>
+                    <span class="val" id="sum-phone-price">77,900 ฿</span>
                 </div>
                 <div class="summary-row sub" id="row-watch-full" style="display: none;">
                     <span>ราคาปกติ Galaxy Watch:</span>
@@ -530,7 +530,7 @@
 
                 <div class="summary-row">
                     <span>ราคาเต็มรวมทั้งหมด:</span>
-                    <span class="val" id="sum-full-total" style="text-decoration: line-through; color: var(--text-secondary);">69,900 ฿</span>
+                    <span class="val" id="sum-full-total" style="text-decoration: line-through; color: var(--text-secondary);">77,900 ฿</span>
                 </div>
 
                 <!-- Discounts Breakdown -->
@@ -543,7 +543,7 @@
                     <span class="discount-val" id="sum-branch-disc">0 ฿</span>
                 </div>
                 <div class="summary-row sub" id="row-prebook-disc">
-                    <span>- ส่วนลด Pre-booking:</span>
+                    <span>- ส่วนลดพิเศษ / Pre-booking:</span>
                     <span class="discount-val" id="sum-prebook-disc">0 ฿</span>
                 </div>
                 <div class="summary-row sub" id="row-tradeup-topup" style="display: none;">
@@ -579,14 +579,14 @@
                 <!-- Net Price -->
                 <div class="net-price-box">
                     <div class="net-price-label">ราคาสุทธิที่ลูกค้าต้องชำระ</div>
-                    <div class="net-price-val" id="sum-net-price">69,900 ฿</div>
+                    <div class="net-price-val" id="sum-net-price">72,900 ฿</div>
                     <div style="font-size: 12px; color: #4361ee;" id="net-price-desc">ราคารวมเครื่องและอุปกรณ์เสริมที่เลือก</div>
                 </div>
 
                 <!-- Installment 0% 10 Months -->
                 <div class="installment-box">
                     <div class="installment-label">⚡ ผ่อน 0% นาน 10 เดือน (ผ่านบัตรที่ร่วมรายการ)</div>
-                    <div class="installment-val" id="sum-installment">6,990 <span style="font-size: 15px; font-weight: normal;">฿ / เดือน</span></div>
+                    <div class="installment-val" id="sum-installment">7,290 <span style="font-size: 15px; font-weight: normal;">฿ / เดือน</span></div>
                 </div>
 
                 <!-- กล่องแสดงข้อเสนอพิเศษเพิ่มเติมในใบสรุป (ซ่อนไว้จนกว่าจะพิมพ์) -->
@@ -621,15 +621,24 @@
     </div>
 
     <script>
+        /*
+          อัปเดตโครงสร้างเงื่อนไขโปรโมชันใหม่:
+          - Z Fold8 Ultra / Z Fold8:
+            * 512GB / 1TB: ส่วนลดเดิม 4,000 -> เพิ่มเป็น 5,000 บาท
+            * 256GB: ส่วนลด 1,000 บาท (ใช้ร่วมกับ Trade-Up ได้)
+          - Z Flip8:
+            * กรณีส่วนลดเงินสด (ไม่ Trade-Up): 256GB/512GB ได้ลด 5,000 บาท
+            * กรณี Trade-Up: 256GB/512GB ได้ลดทันที 1,000 บาท + Trade-Up On-Top 8,000 บาท
+        */
         const products = {
             Fold8Ultra: {
                 name: "Z Fold8 Ultra",
                 adapterVal: 1090,
                 adapterName: "Power Adapter 45W",
                 storage: [
-                    { cap: "256 GB", price: 69900, prebookDisc: 0, tradeupBonus: 8000 },
-                    { cap: "512 GB", price: 77900, prebookDisc: 4000, tradeupBonus: 8000 },
-                    { cap: "1 TB", price: 93900, prebookDisc: 4000, tradeupBonus: 11000 }
+                    { cap: "256 GB", price: 69900, prebookDisc: 1000, tradeupBonus: 8000 },
+                    { cap: "512 GB", price: 77900, prebookDisc: 5000, tradeupBonus: 8000 },
+                    { cap: "1 TB", price: 93900, prebookDisc: 5000, tradeupBonus: 11000 }
                 ],
                 care: [
                     { label: "ไม่รับ Care+", price: 0 },
@@ -642,9 +651,9 @@
                 adapterVal: 1090,
                 adapterName: "Power Adapter 45W",
                 storage: [
-                    { cap: "256 GB", price: 61900, prebookDisc: 0, tradeupBonus: 8000 },
-                    { cap: "512 GB", price: 69900, prebookDisc: 4000, tradeupBonus: 8000 },
-                    { cap: "1 TB", price: 85900, prebookDisc: 4000, tradeupBonus: 11000 }
+                    { cap: "256 GB", price: 61900, prebookDisc: 1000, tradeupBonus: 8000 },
+                    { cap: "512 GB", price: 69900, prebookDisc: 5000, tradeupBonus: 8000 },
+                    { cap: "1 TB", price: 85900, prebookDisc: 5000, tradeupBonus: 11000 }
                 ],
                 care: [
                     { label: "ไม่รับ Care+", price: 0 },
@@ -657,8 +666,8 @@
                 adapterVal: 690,
                 adapterName: "Power Adapter 25W",
                 storage: [
-                    { cap: "256 GB", price: 42900, prebookDisc: 4000, tradeupBonus: 8000 },
-                    { cap: "512 GB", price: 50900, prebookDisc: 4000, tradeupBonus: 8000 }
+                    { cap: "256 GB", price: 42900, prebookDisc: 5000, tradeupBonus: 8000 },
+                    { cap: "512 GB", price: 50900, prebookDisc: 5000, tradeupBonus: 8000 }
                 ],
                 care: [
                     { label: "ไม่รับ Care+", price: 0 },
@@ -670,7 +679,7 @@
 
         let purchaseType = 'normal';
         let currentModel = 'Fold8Ultra';
-        let currentStorageIdx = 0;
+        let currentStorageIdx = 1; // Default to 512GB
         let currentCareIdx = 0;
         let isHandraiser = false;
         let isTradeUp = false;
@@ -691,7 +700,7 @@
 
         function selectModel(modelKey) {
             currentModel = modelKey;
-            currentStorageIdx = 0;
+            currentStorageIdx = (modelKey === 'Flip8') ? 0 : 1; // Default 512GB for Folds, 256GB for Flip
             currentCareIdx = 0;
 
             const btns = document.querySelectorAll('#model-container .select-btn');
@@ -769,24 +778,25 @@
             const subNoTrade = document.getElementById('sub-notrade');
             const subTrade = document.getElementById('sub-trade');
 
+            // 1. Text for Direct Cash Discount (No Trade-Up)
             if (stg.prebookDisc > 0) {
-                subNoTrade.innerText = `รับส่วนลด Pre-booking ${stg.prebookDisc.toLocaleString()}.-`;
+                subNoTrade.innerText = `รับส่วนลดพิเศษ ${stg.prebookDisc.toLocaleString()}.-`;
             } else {
-                subNoTrade.innerText = `ไม่มีส่วนลด Pre-booking (ราคาปกติ)`;
+                subNoTrade.innerText = `ไม่มีส่วนลดเงินสด (ราคาปกติ)`;
             }
 
+            // 2. Text for Trade-Up
             if (currentModel === 'Flip8') {
-                subTrade.innerText = `Trade-Up ${stg.tradeupBonus.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
-                subTrade.style.color = 'var(--danger-red)';
+                subTrade.innerText = `✨ รับส่วนลด 1,000 บาท + Trade-Up สูงสุด ${stg.tradeupBonus.toLocaleString()}.-`;
+                subTrade.style.color = 'var(--success-green)';
             } else {
-                if (stg.prebookDisc > 0) {
-                    const totalTwoTiers = stg.prebookDisc + stg.tradeupBonus;
-                    subTrade.innerText = `✨ คุ้ม 2 ต่อ! รวม ${totalTwoTiers.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
-                    subTrade.style.color = 'var(--success-green)';
+                if (stg.cap === "256 GB") {
+                    subTrade.innerText = `✨ รับส่วนลด 1,000 บาท + Trade-Up สูงสุด ${stg.tradeupBonus.toLocaleString()}.-`;
                 } else {
-                    subTrade.innerText = `Trade-Up ${stg.tradeupBonus.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
-                    subTrade.style.color = 'var(--success-green)';
+                    const totalTwoTiers = stg.prebookDisc + stg.tradeupBonus;
+                    subTrade.innerText = `✨ ลดคุ้ม 2 ต่อ! รวม ${totalTwoTiers.toLocaleString()} บาท + มูลค่าเครื่องเก่า`;
                 }
+                subTrade.style.color = 'var(--success-green)';
             }
         }
 
@@ -877,7 +887,7 @@
                 inputEl.style.borderColor = 'var(--danger-red)';
                 
                 tradeupTopup = 0;
-                prebookDisc = (currentModel === 'Flip8') ? 0 : storageData.prebookDisc;
+                prebookDisc = (currentModel === 'Flip8') ? 0 : (storageData.cap === "256 GB" ? 1000 : storageData.prebookDisc);
             } else {
                 warningEl.style.display = 'none';
                 if(isTradeUp) {
@@ -886,15 +896,24 @@
                 }
                 
                 if (!isTradeUp) {
+                    // กรณีไม่ Trade-Up
                     prebookDisc = storageData.prebookDisc;
                     tradeupTopup = 0;
                 } else {
+                    // กรณีเลือก Trade-Up
                     if (currentModel === 'Flip8') {
-                        prebookDisc = 0; 
+                        // Z Flip8 เลือก Trade-Up จะได้ลดส่วนลดเงินสด 1,000 + On-top Trade-Up 8,000
+                        prebookDisc = 1000; 
                         tradeupTopup = storageData.tradeupBonus;
                     } else {
-                        prebookDisc = storageData.prebookDisc;
-                        tradeupTopup = storageData.tradeupBonus;
+                        // Fold8 / Fold8 Ultra
+                        if (storageData.cap === "256 GB") {
+                            prebookDisc = 1000;
+                            tradeupTopup = storageData.tradeupBonus;
+                        } else {
+                            prebookDisc = storageData.prebookDisc; // 5,000
+                            tradeupTopup = storageData.tradeupBonus; // 8,000 / 11,000
+                        }
                     }
                 }
             }
@@ -974,6 +993,7 @@
             selectModel('Fold8Ultra');
         }
 
+        // Initialize Default Values
         setPurchaseType('normal');
         selectModel('Fold8Ultra');
         setHandraiser(false);
